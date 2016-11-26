@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 744.09448819 1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="shape1.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="475.00597"
+     inkscape:cy="612.67906"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1536"
+     inkscape:window-height="801"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <image
+       y="214.60733"
+       x="125.53484"
+       id="image3528"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAAAgCAIAAAAQbYi1AAAAA3NCSVQICAjb4U/gAAAAkElEQVRo
+ge3XMQ7DIBBE0SXyWcgFwynwBcNlSBHJsuyx5MqzxX8VomH1BQURAAA8rRw3Pl/HGD7r+7z3en6M
+/IgiEEUgikAUgSiCM8rsdfa6rQ8LI1uU2Wtpo7Sxr5ChSGR7PqUN9wgREYvx7CT34sx5U/7PxzjA
+lVzPJwmiCPyS+SXfQxSBKAJRBKIAAJDCD9QIGDnSbUGCAAAAAElFTkSuQmCC
+"
+       style="image-rendering:optimizeSpeed"
+       preserveAspectRatio="none"
+       height="32"
+       width="92" />
+    <path
+       style="fill:#d40000;fill-opacity:1"
+       d="m 125.6115,230.71496 0,-15.89285 45.89286,0 45.89286,0 0,15.89285 0,15.89286 -45.89286,0 -45.89286,0 0,-15.89286 z m 85,-0.17857 0,-10 -40,0 -40,0 0,10 0,10 40,0 40,0 0,-10 z"
+       id="path3533"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

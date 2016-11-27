@@ -113,10 +113,10 @@ void draw() {
     if ((mousePressed) && (bReleased == true))
     {
       //send with BT
-      byte[] data = {'s', 'w', 'i', 't', 'c', 'h', '\r'};
-      bt.broadcast(data);
+      //byte[] data = {'s', 'w', 'i', 't', 'c', 'h', '\r'};
+      //bt.broadcast(data);
       //first tap off to send next message
-      bReleased = false;
+      //bReleased = false;
     }
     if (mousePressed == false)
     {
@@ -145,9 +145,9 @@ public void colorA(int theValue) {
     //{
       println("Envoie");
       //send with BT
-      byte[] data = {'s', 'w', 'i', 't', 'c', 'h', '\r'};
+      byte[] data = {'a', 'l', 'a', 'i', 'n', '\n'};
       //bt.broadcast(data);
-      bt.broadcast("data");
+      bt.broadcast(data);
       //first tap off to send next message
       bReleased = false;
     //}

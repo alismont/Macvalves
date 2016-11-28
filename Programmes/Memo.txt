@@ -1,0 +1,15 @@
+1) -- Saving and Restoring Parameters, Variables and Programs --
+
+"SAVE": 		-> programme to the SRAM memory image to FLASH memory
+
+"RETRIEVE"		-> reload the contents of the FLASH memory into the active SRAM memory
+
+"SVV"
+
+"RTV"
+
+"IP"
+
+"WAIT VBx"
+"OUT" message
+

@@ -79,14 +79,20 @@ int PasApas=0;
 boolean LAI1=false;
 boolean LPSA=false;
 boolean LPOS1=false;
+boolean LDIO=false;
 
 float AI1=0.0;
 float PSA=0.0;
+String DIO;
+
 float test=0.0;
 int Lu=0;
+
 int LectureAI1=0;
 int LecturePSA=0;
 int LectureADD=0;
+int LectureDIO=0;
+
 int scan=0;
 int psq=1;
 String ADD="";
@@ -201,7 +207,7 @@ void setup() {
     .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
     ;
 
-  cp5.addBang("POS1")
+  cp5.addBang("DIO")
     .setPosition(130, 280)
     .setSize(80, 20)
     .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
@@ -244,6 +250,7 @@ void draw() {
       LecturePSA=1;
     }
   }
+
   if (LAI1 && LPSA) {
     switch(psq) {
     case 1: 
@@ -270,9 +277,17 @@ void draw() {
     }
   }
 
-  if (LPOS1) {
-    //SeqPos();
+  if (LDIO) {
+    sq=0;
+    if (LDIO && Lu==0 && LectureDIO==0) {
+      Lu=1;
+      myPort.write("5DIN7.8?");
+      myPort.write(13);
+      //myPort.write(10);
+      LectureDIO=1;
+    }
   }
+
 
   delay(100);
   //--Lecture --
@@ -327,6 +342,14 @@ void draw() {
   textSize(20);
   text("Recu: "+ADD, 25, 140);
 
+  //-- Affichage DIO
+  if (LDIO) {
+    text("DIN7.8: "+DIO, 20, 315);
+  } else {
+    text("DIN7.8:      ", 20, 315);
+  }
+
+  //-- Affichage mouse--
   text(mouseX+"  "+mouseY, 1235, 37);
 
   //-- Graph --
@@ -364,6 +387,13 @@ void lectureBuffer() {
         //println(inBuffer.substring(8, 14));
         PSA=float(inBuffer.substring(8));
         LecturePSA=0;
+      }
+
+      if (LectureDIO==1) {
+        //println(inBuffer.substring(11));
+        DIO=inBuffer.substring(11);
+        println(DIO);
+        LectureDIO=0;
       }
     }
     myPort.clear();
@@ -410,14 +440,14 @@ public void PSA() {
     s1.setVisible(false);
   }
 }
-//-- Lecture POS1
-public void POS1() {
-  if (!LPOS1) {
-    LPOS1=true;
+//-- Lecture DIO
+public void DIO() {
+  if (!LDIO) {
+    LDIO=true;
     s2.setVisible(true);
   } else
   {
-    LPOS1=false;
+    LDIO=false;
     s2.setVisible(false);
   }
 }

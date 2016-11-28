@@ -70,7 +70,7 @@ void setup() {
     .setValue(100)
     .setPosition(100, 120)
     .setSize(200, 19)
-    ;
+    ; 
 
   cp5.addButton("colorC")
     .setPosition(100, 140)

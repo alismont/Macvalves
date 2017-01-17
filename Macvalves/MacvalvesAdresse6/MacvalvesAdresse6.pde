@@ -11,7 +11,7 @@ float yBPr=0.00;
 float yBSM=0.00;
 float BG1=0;
 float BG2=0;
-
+float VF4=0;
 //--------------Variable programme-------
 PFont font;
 
@@ -141,7 +141,7 @@ void setup() {
   myChart = cp5.addChart("dataflow")
     .setPosition(300, 400)
     .setSize(500, 200)
-    .setRange(-5, 5)
+    .setRange(-0.5, 5)
     .setView(Chart.LINE) // use Chart.LINE, Chart.PIE, Chart.AREA, Chart.BAR_CENTERED
     .setStrokeWeight(1.5)
     .setColorCaptionLabel(color(40))
@@ -233,7 +233,7 @@ void draw() {
     sq=0;
     if (LAI1 && Lu==0 && LectureAI1==0) {
       Lu=1;
-      myPort.write("5AI1?");
+      myPort.write("6AI1?");
       myPort.write(13);
       // myPort.write(10);
       LectureAI1=1;
@@ -244,8 +244,8 @@ void draw() {
     sq=0;
     if (LPSA && Lu==0 && LecturePSA==0) {
       Lu=1;
-     myPort.write("5PSA?");
-      //myPort.write("5VB5?");
+     myPort.write("6PSA?");
+      //myPort.write("6VB5?");
       myPort.write(13);
       //myPort.write(10);
       LecturePSA=1;
@@ -258,7 +258,7 @@ void draw() {
       //-- Traitement AI1
       if (LAI1 && Lu==0 && LectureAI1==0) {
         Lu=1;
-        myPort.write("5AI1?");
+        myPort.write("6AI1?");
         myPort.write(13);
         //myPort.write(10);
         LectureAI1=1;
@@ -268,7 +268,7 @@ void draw() {
     case 2:
       if (LPSA && Lu==0 && LecturePSA==0) {
         Lu=1;
-        myPort.write("5PSA?");
+        myPort.write("6PSA?");
         myPort.write(13);
         //myPort.wr ite(10);
         LecturePSA=1;
@@ -282,7 +282,7 @@ void draw() {
     sq=0;
     if (LDIO && Lu==0 && LectureDIO==0) {
       Lu=1;
-      myPort.write("5DIN7.8?");
+      myPort.write("6DIN7.8?");
       myPort.write(13);
       //myPort.write(10);
       LectureDIO=1;
@@ -355,11 +355,16 @@ void draw() {
 
   //-- Graph --
   myChart.push("incoming", (AI1));
+
   myChart2.push("incoming2", (PSA));
+
+  stroke(200);
+  println(VF4);
+  line(280, 500-VF4, 350, 500-VF4);
 
   //-- Affichage shape --
   shape(s);
-  shape(s1);
+  shape(s1); 
   shape(s2);
 }
 
@@ -375,6 +380,7 @@ void lectureBuffer() {
 
         //println(inBuffer.substring(0));
         ADD=inBuffer.substring(0);
+        VF4=float(inBuffer.substring(8));
         LectureADD=0;
       }
 

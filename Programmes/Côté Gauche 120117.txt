@@ -37,8 +37,7 @@
 (*---------------------------------------*)
 (* Program 2 *)
    PROGRAM2
-   KLP3
-   
+   KLP3   
 (* DON5.11 enable vacum  DON5.12 enable blow *)
    DON5.12 = OFF
    DON5.11 = ON
@@ -46,7 +45,7 @@
    
 (* DIN7.1 cycle start DIN7.2 bp common *)
 010IF DIN7.1 AND DIN7.2 GOSUB 500
-(* DIN7.3 vacum on off DO11 enable vacum
+(* DIN7.3 vacum on off DO11 enable vacum *)
 020IF (DIN7.3 AND DIN7.2) AND NOT(DO11) GOSUB 300
 030IF (DIN7.3 AND DIN7.2) AND DO11 GOSUB 400
 040IF TM5 GOSUB 100
@@ -66,37 +65,42 @@
    WAIT NOT(DIN7.3) OR NOT(DIN7.2)
    RETURN
    
-(* AUTO *)
+(* AUTO   VF3=1  VF4=2.4 *)
 500VB5 = ON
-
+   SVV (*SAVE VARIABLES   *)
+   (* VF4=2.4 *)
+   VF3=VF4-0.05
 (* DESCENDRE
    DON5.14 = OFF
    DON5.13 = ON
 (* DESCENDRE SANS ROTATION
-   WAIT AI1 > VF1  
+   WAIT AI1 > 0.0 
    VB5 = OFF
    MAC = 20000
    MDC = 50000
-   MVL = 35000
-(* Rotation 
+   MVL = 12000
+(* Rotation *)
    RVF
-   WAIT AI1 > (VF2 - 0.07)
+   WAIT AI1 > VF3
    VB6 = ON
-   ST	
-   TLE=0
-(*501EXM1
+   ST
+   TLC=95	
+   TLE=1
+(*501EXM1 *)
 501MT=VEL
-   MPI=1000
+   MPI=5
    RPI
    STM4=1
-   IF (AI1 < VF2 ) GOTO 501
+   IF (AI1 <= VF4 ) GOTO 501
 502ST
-   WAIT IP
-   
+   (* WAIT IP *)
+   TLE=0
    IF NOT(DIN7.1) AND NOT(DIN7.2) GOSUB 530
    GOTO 502
 
-530DON5.11 = ON
+530VB7=OFF
+   VB8=ON
+   DON5.11 = ON
    DON5.13 = OFF
    DON5.14 = ON
    DON5.12 = ON
@@ -124,18 +128,6 @@
    STM5 = 300
    WAIT NOT(DIN7.1) AND NOT(DIN7.2)
    RETURN
-   END
-   
-   VB6 = OFF
-   VB7 = ON
-   IF (AI1 > 0.0 ) GOTO 514
- (* repositionnement *)  
-   MAC = 20000
-   MDC = 50000
-   MVL = 35000
-   MPA = 0.0 
-   RPA
-   RETURN   
    END
    
 (*---------------------------------------*)

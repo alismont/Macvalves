@@ -7,7 +7,7 @@
    IF (DIN7.8 AND NOT(DIN7.15)) OR (DIN7.7 AND DIN7.16) GOTO 35
    IF (DIN7.7 AND VB1) AND NOT(PROG2) GOTO 50
    IF NOT(VB1) GOSUB 60
-   (*IF VB5 AND (NOT(DIN7.1) OR NOT(DIN7.2)) GOSUB 100
+   IF VB5 AND (NOT(DIN7.1) OR NOT(DIN7.2)) GOSUB 100
    GOTO 6
 030EXP3
    GOTO 6
@@ -40,14 +40,11 @@
    DON5.12 = OFF
    DON5.11 = ON
    STM5 = 300
-(* DIN7.1 cycle start DIN7.2 bp common *)
 010IF DIN7.1 AND DIN7.2 GOSUB 500
-(* DIN7.3 vaccum on off DO11 enable vaccum
-(*020IF (DIN7.3 AND DIN7.2) AND NOT(DO11) GOSUB 300
-(* 030IF (DIN7.3 AND DIN7.2) AND DO11 GOSUB 400
-(* 040IF TM5 GOSUB 100
+020IF (DIN7.3 AND DIN7.2) AND NOT(DO11) GOSUB 300
+030IF (DIN7.3 AND DIN7.2) AND DO11 GOSUB 400
+040IF TM5 GOSUB 100
 050GOTO 10
-(* vaccum & blow *)
 100DON5.12 = OFF
    DON5.11 = OFF
    RETURN
@@ -60,55 +57,135 @@
    DON5.12 = OFF
    WAIT NOT(DIN7.3) OR NOT(DIN7.2)
    RETURN
-(* auto *)
-500VB5 = OFF
-   VF3 = 1.0
-   VF4 = 1.5
-   VF5 = 2.5
-   VB6 = OFF
-(* descendre
+500VB5 = ON
    DON5.14 = OFF
    DON5.13 = ON
-(* DESCENDRE SANS ROTATION
-   WAIT AI1 > VF3 
-   VB5 = ON
-   MAC = 20000
-   MDC = 50000
-   MVL = 1000
-(* Rotation 
-   RVF
-   WAIT AI1 > VF4
-   VB6 = ON
-   ST
-   STM4=2
-   WAIT TM4      	
-   TLE=0
-(* 501EXM1
-501MT=VEL
-   MPI=100
-   RPI
-   STM4=1
-   WAIT TM4
-   ST
-   IF (AI1 < VF5 ) GOTO 501
-   ST
-   WAIT IP
-502IF NOT(DIN7.7) GOTO 514
-   GOTO 502
-(* torque mode *) 
-(* Remonter *)   
-514VB6 = OFF
-   VB7 = ON
-   DON5.14 = ON
-   DON5.13 = OFF
-   IF (AI1 > 0.0 ) GOTO 514
- (* repositionnement *)  
+   WAIT AI1 > VF1
+   VB5 = OFF
    MAC = 20000
    MDC = 50000
    MVL = 35000
-   MPA = 0.0 
+   RVF
+   WAIT AI1 > (VF2 - 0.07)
+   VB6 = ON
+505MAC = 20000
+   MDC = 50000
+   MVL = 35000
+   RVF
+   WAIT AI1 > VF2
+   ST
+   WAIT IP
+   IF NOT(DIN7.14) GOTO 514
+   MVL = 2000
+   IF NOT(DI1) AND NOT(DI2) THEN
+   TLC = 85
+   IF DI1 THEN
+   TLC = 90
+   IF DI2 THEN
+   TLC = 95
+   TLE = 1
+   RVF
+   STM3 = 12
+511IF TL GOTO 512
+   IF TM3 GOTO 530
+   GOTO 511
+512ST
+   TLE = 0
+514VB6 = OFF
+   VB7 = ON
+515IF NOT(DIN7.13) GOTO 520
+   IF DIN7.13 GOTO 525
+520MAC = 10000
+   MDC = 50000
+   MVL = 35000
+   MJK = 0
+   IF DIN7.14 GOTO 522
+   IF (PSA >= -4096.) AND (PSA < -3072.) THEN
+   MPA = -4096
+   IF (PSA >= -3072.) AND (PSA < -2048.) THEN
+   MPA = -2048
+   IF (PSA >= -2048.) AND (PSA < 1024.) THEN
+   MPA = 0
+   IF (PSA >= 1024.) AND (PSA < 3072.) THEN
+   MPA = 2048
+   IF (PSA >= 3072.) AND (PSA < 4096.) THEN
+   MPA = 4096
+   GOTO 523
+522IF (PSA >= -4096.) AND (PSA < -2048.) THEN
+   MPA = -4096
+   IF (PSA >= -2048.) AND (PSA < 0.) THEN
+   MPA = -2048
+   IF (PSA >= 0.) AND (PSA < 2048.) THEN
+   MPA = 0
+   IF (PSA >= 2048.) AND (PSA < 4096.) THEN
+   MPA = 4096
+523RPA
+   WAIT IP
+   MPI = 108
+   RPI
+   WAIT IP
+   VB7 = OFF
+   VB8 = ON
+   GOTO 530
+525MAC = 10000
+   MDC = 50000
+   MVL = 35000
+   MJK = 0
+   IF DIN7.14 GOTO 527
+   IF (PSA >= -4096.) AND (PSA < -2048.) THEN
+   MPA = -3072
+   IF (PSA >= -2048.) AND (PSA < 0.) THEN
+   MPA = -1024
+   IF (PSA >= 0.) AND (PSA < 2048.) THEN
+   MPA = 1024
+   IF (PSA >= 2048.) AND (PSA < 4096.) THEN
+   MPA = 3072
+   GOTO 528
+527IF (PSA >= -4096.) AND (PSA < -3072.) THEN
+   MPA = -5120
+   IF (PSA >= -3072.) AND (PSA < -1024.) THEN
+   MPA = -3072
+   IF (PSA >= -1024.) AND (PSA < 2048.) THEN
+   MPA = -1024
+   IF (PSA >= 2028.) AND (PSA < 3072.) THEN
+   MPA = 2048
+   IF (PSA >= 3072.) AND (PSA < 4096.) THEN
+   MPA = 3072
+528RPA
+   WAIT IP
+   MPI = 108
+   RPI
+   WAIT IP
+   VB7 = OFF
+   VB8 = ON
+530DON5.11 = ON
+   DON5.13 = OFF
+   DON5.14 = ON
+   DON5.12 = ON
+   STM1 = 0.5
+   WAIT TM1
+   DON5.12 = OFF
+   DON5.11 = ON
+   VB8 = OFF
+   VB9 = ON
+   WAIT AI1 < 1.6
+540MAC = 10000
+   MDC = 50000
+   MVL = 35000
+   MJK = 0
+   MVM = 3000
+   MPA = 0
    RPA
-   RETURN   
+   WAIT IP
+   ST
+   VB1 = ON
+   VB6 = OFF
+   VB7 = OFF
+   VB8 = OFF
+   VB9 = OFF
+   STM5 = 300
+   WAIT NOT(DIN7.1) AND NOT(DIN7.2)
+   RETURN
    END
 
 (* Program 3 *)

@@ -40,7 +40,7 @@
    KLP3
 
 
-   DON6.12 = OFF
+550DON6.12 = OFF
    DON6.11 = ON
    STM5 = 300
 
@@ -69,9 +69,9 @@
 (* AUTO*)
 500VB5 = ON
    SVV (*SAVE VARIABLES   *)
-   IF (VF5=0.0) VF5=10000.0
-   IF(VF4=0.0) VF4=2.0
-   VF3=VF4-0.05
+   (* IF (VF5=0.0) VF5=10000.0 *)
+   (* IF(VF4=0.0) VF4=2.0 *)
+   VF3=VF4-0.02
 (* DESCENDRE
    DON6.14 = OFF
    DON6.13 = ON
@@ -97,7 +97,9 @@
 502ST
    (* WAIT IP *)
    TLE=0
-   IF NOT(DIN7.1) AND NOT(DIN7.2) GOSUB 530
+   STM4=1
+   WAIT TM4
+   GOSUB 530
    GOTO 502
 
 530VB7=OFF
@@ -106,7 +108,7 @@
    DON6.13 = OFF
    DON6.14 = ON
    DON6.12 = ON
-   STM1 = 0.5
+   STM1 = 1
    WAIT TM1
    DON6.12 = OFF
    DON6.11 = ON
@@ -128,6 +130,7 @@
    VB8 = OFF
    VB9 = OFF
    STM5 = 300
+   GOSUB 550
    WAIT NOT(DIN7.1) AND NOT(DIN7.2)
    RETURN
    END

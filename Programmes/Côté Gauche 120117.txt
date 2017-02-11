@@ -35,7 +35,7 @@
    END
 
 (*---------------------------------------*)
-(* Program 2 *)
+(* Program 2 VF4=2.3 VF5=10000 DE BASE *)
    PROGRAM2
    KLP3   
 (* DON5.11 enable vacum  DON5.12 enable blow *)
@@ -65,10 +65,11 @@
    WAIT NOT(DIN7.3) OR NOT(DIN7.2)
    RETURN
    
-(* AUTO   VF3=1  VF4=2.4 *)
+(* AUTO*)
 500VB5 = ON
    SVV (*SAVE VARIABLES   *)
-   (* VF4=2.4 *)
+   IF (VF5=0) VF5=10000
+   IF (VF4=0.0) VF4=2.3
    VF3=VF4-0.05
 (* DESCENDRE
    DON5.14 = OFF
@@ -78,7 +79,7 @@
    VB5 = OFF
    MAC = 20000
    MDC = 50000
-   MVL = 12000
+   MVL = VF5
 (* Rotation *)
    RVF
    WAIT AI1 > VF3
@@ -227,7 +228,7 @@
    DON5.12 = OFF
    DON5.13 = OFF
    DON5.14 = OFF
-   RTV
+   (* RTV
    WAIT IO11  (* ARRET URGENCE
    DON5.9 = ON
    IF IO11 GOTO 20

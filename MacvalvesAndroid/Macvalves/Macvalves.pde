@@ -1,10 +1,7 @@
-//import processing.serial.*;  //<>// //<>// //<>// //<>//
+ //<>//
+import io.inventit.processing.android.serial.*;
+//import com.yourinventit.processing.android.serial.*;
 import controlP5.*; // importe la librairie GUI controlP5
-import android.content.Intent;
-import android.os.Bundle;
-import ketai.net.bluetooth.*;
-import ketai.ui.*;
-import ketai.net.*; 
 
 //-----Variables bargraphe-----------
 BarGraphe barGraphe;
@@ -78,7 +75,7 @@ int bleuclair=color(0, 255, 255);
 int violet=color(255, 0, 255);
 
 // --- Port Série ---
-//Serial  myPort; // Création objet désignant le port série
+Serial  myPort; // Création objet désignant le port série
 
 int PasApas=0;
 boolean LAI1=false;
@@ -102,31 +99,15 @@ int scan=0;
 int psq=1;
 String ADD="";
 
-PFont fontMy;
-boolean bReleased = true; //no permament sending when finger is tap
-KetaiBluetooth bt;
-boolean isConfiguring = true;
-String info = "";
-KetaiList klist;
-ArrayList devicesDiscovered = new ArrayList();
-
 //*************************** SETUP ***************************************************************************
 void setup() {
   //size(2000, 1000);
   fullScreen();
-
-  //start listening for BT connections
-  bt.start();
-  //at app start select device…
-  isConfiguring = true;
-
-
-  //println(Serial.list()); // affiche dans la console la liste des ports s�ries
-  //myPort = new Serial(this, Serial.list()[0], 9600, 'O', 7, 1); // Initialise une nouvelle instance du port S�rie
-  ////myPort = new Serial(this, Serial.list()[0], 9600, 'N', 8, 1); // Initialise une nouvelle instance du port S�rie
-  ////myPort.bufferUntil(lf); // attendre arriv�e d'un saut de ligne pour g�n�rer �v�nement s�rie 
-  //myPort.buffer(1000);
-  //myPort.clear();
+  println(Serial.list(this)); // affiche dans la console la liste des ports s�ries
+  myPort = new Serial(this, Serial.list(this)[0], 9600, 'O', 7, 1); // Initialise une nouvelle instance du port S�rie
+ 
+  myPort.buffer(1000);
+  myPort.clear();
 
   //-- Shape
   s = loadShape("shape1-1.svg");
@@ -253,13 +234,8 @@ void draw() {
     sq=0;
     if (LAI1 && Lu==0 && LectureAI1==0) {
       Lu=1;
-
-      byte[] data = {'5', 'A', 'I', '1', '?', '\n'};
-      //bt.broadcast(data);
-      bt.broadcast(data);
-
-      //myPort.write("5AI1?");
-      //myPort.write(13);
+      myPort.write("5AI1?");
+      myPort.write(13);
       // myPort.write(10);
       LectureAI1=1;
     }
@@ -269,8 +245,9 @@ void draw() {
     sq=0;
     if (LPSA && Lu==0 && LecturePSA==0) {
       Lu=1;
-      //myPort.write("5PSA?");
-      //myPort.write(13);
+     myPort.write("5PSA?");
+      //myPort.write("5VB5?");
+      myPort.write(13);
       //myPort.write(10);
       LecturePSA=1;
     }
@@ -282,8 +259,8 @@ void draw() {
       //-- Traitement AI1
       if (LAI1 && Lu==0 && LectureAI1==0) {
         Lu=1;
-        //myPort.write("5AI1?");
-        //myPort.write(13);
+        myPort.write("5AI1?");
+        myPort.write(13);
         //myPort.write(10);
         LectureAI1=1;
         psq=2;
@@ -292,8 +269,8 @@ void draw() {
     case 2:
       if (LPSA && Lu==0 && LecturePSA==0) {
         Lu=1;
-        //myPort.write("5PSA?");
-       // myPort.write(13);
+        myPort.write("5PSA?");
+        myPort.write(13);
         //myPort.wr ite(10);
         LecturePSA=1;
         psq=1;
@@ -306,8 +283,8 @@ void draw() {
     sq=0;
     if (LDIO && Lu==0 && LectureDIO==0) {
       Lu=1;
-      //myPort.write("5DIN7.8?");
-      //myPort.write(13);
+      myPort.write("5DIN7.8?");
+      myPort.write(13);
       //myPort.write(10);
       LectureDIO=1;
     }

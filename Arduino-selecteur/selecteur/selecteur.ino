@@ -11,8 +11,14 @@
 
 float P5VF4,P0_5VF4=2.50,P1_5VF4=2.51,P2_5VF4=2.52,P3_5VF4=2.53;
 float P6VF4,P0_6VF4=2.60,P1_6VF4=2.60,P2_6VF4=2.60,P3_6VF4=2.60;
-int intP5VF4,intP0_5VF4,intP1_5VF4,intP2_5VF4,intP3_5VF4; //en eprom
-int intP6VF4,intP0_6VF4,intP1_6VF4,intP2_6VF4,intP3_6VF4; //en eprom
+int intP5VF4,intP0_5VF4,intP1_5VF4,intP2_5VF4,intP3_5VF4; 
+int intP6VF4,intP0_6VF4,intP1_6VF4,intP2_6VF4,intP3_6VF4;
+
+float P5VF5,P0_5VF5=10000,P1_5VF5=10000,P2_5VF5=10000,P3_5VF5=10000;
+float P6VF5,P0_6VF5=5000,P1_6VF5=5000,P2_6VF5=5000,P3_6VF5=5000;
+int intP5VF5,intP0_5VF5,intP1_5VF5,intP2_5VF5,intP3_5VF5; 
+int intP6VF5,intP0_6VF5,intP1_6VF5,intP2_6VF5,intP3_6VF5;
+ 
 int adresse;
 int seq=1,val,val1;
 int prog; //0 à 3
@@ -24,8 +30,11 @@ char octetReceptionProc;
 char caractereReceptionProc;
 String chaineReception, Tram;
 String chaineReceptionProc, TramProc;
+char charVal[10]; 
 
-
+int ValChg=0;
+char CR=13;
+int Lu=1;
 //-------------
 void setup()
 {
@@ -40,6 +49,18 @@ void setup()
 //   sauverInt(12, 262); 
 //    sauverInt(14, 263); 
 
+
+//sauverInt(16, 10000); 
+//  sauverInt(18, 10000); 
+//   sauverInt(20, 10000); 
+//    sauverInt(22, 10000);
+//    
+// sauverInt(24, 5000); 
+//  sauverInt(26, 5000); 
+   sauverInt(28, 5000); 
+//    sauverInt(30, 5000); 
+//
+
   pinMode(2, INPUT); 
   pinMode(3, INPUT);
 digitalWrite(2, HIGH);
@@ -47,6 +68,9 @@ digitalWrite(3, HIGH);
 
 Serial1.begin(9600);
 Serial.begin(9600);
+
+Serial2.begin(9600);
+Serial3.begin(9600);
 
 LecturePrg();
 }
@@ -72,13 +96,17 @@ void loop()
             seq=4;
         break;
       case 4: 
-            Reception();// de processing chg valeur
+            Reception();
+            seq=5;
+        break;  
+       case 5: 
+            EcritureVersGE();
             seq=1;
-        break;     
+        break;       
     }
  
 
-delay(10);
+delay(100);
     
 }
 //*************************************************************
@@ -130,20 +158,28 @@ void LecturePrg()
 // si sel sur  ---programme x--
     switch (prog) {
       case 0: 
-        P5VF4=P0_5VF4;  
-
+        P5VF4=P0_5VF4;
+          P6VF4=P0_6VF4;    
+        P5VF5=P0_5VF5; 
+          P6VF5=P0_6VF5; 
       break;
       case 1: 
         P5VF4=P1_5VF4;  
-
+          P6VF4=P1_6VF4;    
+        P5VF5=P1_5VF5; 
+          P6VF5=P1_6VF5; 
       break;
       case 2: 
         P5VF4=P2_5VF4;  
-
+          P6VF4=P2_6VF4;    
+        P5VF5=P2_5VF5; 
+          P6VF5=P2_6VF5; 
       break;
       case 3: 
         P5VF4=P3_5VF4;  
-
+          P6VF4=P3_6VF4;    
+        P5VF5=P3_5VF5; 
+          P6VF5=P3_6VF5; 
       break;
       }
 }
@@ -161,10 +197,6 @@ void LectureEprom()
         intP3_5VF4=lireInt(6); // octets 6,7
         P3_5VF4=float(intP3_5VF4)/100;
         
-        //Serial.println(P0_5VF4);
-        //        Serial.println(P1_5VF4);
-        //                Serial.println(P2_5VF4);
-        //                        Serial.println(P3_5VF4);
 
   intP0_6VF4= lireInt(8); // octets 8,9
   P0_6VF4=float(intP0_6VF4)/100;
@@ -175,15 +207,32 @@ void LectureEprom()
         intP3_6VF4=lireInt(14); // octets 14,15
         P3_6VF4=float(intP3_6VF4)/100;
         
-              //Serial.println(P0_6VF4);
-              //  Serial.println(P1_6VF4);
-              //          Serial.println(P2_6VF4);
-              //                  Serial.println(P3_6VF4);
+
+  intP0_5VF5= lireInt(16); // octets 16
+  P0_5VF5=float(intP0_5VF5)/1;
+    intP1_5VF5=lireInt(18); // octets 18
+    P1_5VF5=float(intP1_5VF5)/1;
+      intP2_5VF5=lireInt(20); // octets 20
+      P2_5VF5=float(intP2_5VF5)/1;
+        intP3_5VF5=lireInt(22); // octets 22
+        P3_5VF5=float(intP3_5VF5)/1;
+        
+
+  intP0_6VF5= lireInt(24); // octets 24
+  P0_6VF5=float(intP0_6VF5)/1;
+    intP1_6VF5=lireInt(26); // octets 26
+    P1_6VF5=float(intP1_6VF5)/1;
+      intP2_6VF5=lireInt(28); // octets 28
+      P2_6VF5=float(intP2_6VF5)/1;
+        intP3_6VF5=lireInt(30); // octets 30
+        P3_6VF5=float(intP3_6VF5)/1;
+        
 }
 
 //***************************
 void EcritureEprom5VF4()
 {
+ValChg=1;
 // si sel sur  ---programme x--
     switch (prog) {
       case 0: 
@@ -208,27 +257,78 @@ void EcritureEprom5VF4()
 //***************************
 void EcritureEprom6VF4()
 {
+ValChg=1;
 // si sel sur  ---programme x--
     switch (prog) {
       case 0: 
           intP0_6VF4=int(P6VF4 *100);
-          sauverInt(0, intP0_5VF4); 
+          sauverInt(8, intP0_6VF4); 
           break;
       case 1: 
           intP1_6VF4=int(P6VF4 *100);
-          sauverInt(2, intP1_5VF4); 
+          sauverInt(10, intP1_6VF4); 
           break;
       case 2: 
           intP2_6VF4=int(P6VF4 *100);      
-          sauverInt(4, intP2_5VF4); 
+          sauverInt(12, intP2_6VF4); 
           break;
       case 3: 
           intP3_6VF4=int(P6VF4 *100);       
-          sauverInt(6, intP3_5VF4); 
+          sauverInt(14, intP3_6VF4); 
           break;
       }
 }
 //**********************************
+void EcritureEprom5VF5()
+{
+ValChg=1;
+// si sel sur  ---programme x--
+    switch (prog) {
+      case 0: 
+          intP0_5VF5=int(P5VF5 *1);
+          sauverInt(16, intP0_5VF5); 
+          break;
+      case 1: 
+          intP1_5VF5=int(P5VF5 *1);
+          sauverInt(18, intP1_5VF5); 
+          break;
+      case 2: 
+          intP2_5VF5=int(P5VF5 *1);      
+          sauverInt(20, intP2_5VF5); 
+          break;
+      case 3: 
+          intP3_5VF5=int(P5VF5 *1);       
+          sauverInt(22, intP3_5VF5); 
+          break;
+      }
+}
+
+
+//***************************
+void EcritureEprom6VF5()
+{
+ValChg=1;
+// si sel sur  ---programme x--
+    switch (prog) {
+      case 0: 
+          intP0_6VF5=int(P6VF5 *1);
+          sauverInt(24, intP0_6VF5); 
+          break;
+      case 1: 
+          intP1_6VF5=int(P6VF5 *1);
+          sauverInt(26, intP1_6VF5); 
+          break;
+      case 2: 
+          intP2_6VF5=int(P6VF5 *1);      
+          sauverInt(28, intP2_6VF5); 
+          break;
+      case 3: 
+          intP3_6VF5=int(P6VF5 *1);       
+          sauverInt(30, intP3_6VF5); 
+          break;
+      }
+}
+//*********************************************************
 void Reception() {
 while (Serial1.available() > 0) { 
 
@@ -251,7 +351,29 @@ while (Serial1.available() > 0) {
           InString = chaineReception.substring(4);
           P6VF4=InString.toFloat();
           EcritureEprom6VF4();         
-        }        
+        }  
+
+              if (chaineReception.substring(0, 4) == "5VF5")  
+        {
+          String InString;
+          InString = chaineReception.substring(4);
+          P5VF5=InString.toFloat();
+          EcritureEprom5VF5();         
+        }
+        
+        if (chaineReception.substring(0, 4) == "6VF5")  
+        {
+          String InString;
+          InString = chaineReception.substring(4);
+          P6VF5=InString.toFloat();
+          EcritureEprom6VF5();         
+        }  
+        
+          if (chaineReception.substring(0, 2) == "Lu")  
+        {
+              Lu=0; 
+        Serial.println(Lu);      
+        }         
       chaineReception = ""; 
       break; 
     }
@@ -267,9 +389,54 @@ while (Serial1.available() > 0) {
 //***********************************
 void AffichageParam(){
 
-  Serial.print("5VF4:");
-  Serial.println(P5VF4);
-  
-    Serial.print("6VF4:");
-  Serial.println(P6VF4);
+if (Lu==0){
+Lu=1;
+Serial.println(Lu);
+    dtostrf( P5VF4, 1, 3, charVal);
+    TramProc = charVal;
+    TramProc = TramProc + "/";
+   
+    dtostrf( P6VF4, 1, 3, charVal);
+    TramProc = TramProc +charVal + "/";
+    
+    dtostrf( P5VF5, 5, 0, charVal);
+    TramProc = TramProc +charVal + "/";
+   
+    dtostrf( P6VF5, 5, 0, charVal);
+    TramProc = TramProc +charVal + "/";
+
+    dtostrf( prog, 1, 0, charVal);
+    TramProc = TramProc +charVal + "/"+"*";
+    Serial1.print(TramProc); 
+    
+Serial.println(TramProc); 
+ 
+//    Serial1.print("*");
+//Serial.println("*");
+      }
 }
+
+//***********************************
+void EcritureVersGE(){
+
+if (ValChg==1){
+
+   Serial2.print("5VF4=");
+     Serial2.print(P5VF4);
+        Serial2.print(CR);
+   Serial3.print("6VF4=");
+     Serial3.print(P6VF4);
+        Serial3.print(CR);
+   
+   
+   Serial2.print("5VF5=");
+     Serial2.print(P5VF5);
+        Serial2.print(CR);
+   Serial3.print("6VF5=");
+     Serial3.print(P6VF5);
+        Serial3.print(CR);
+        
+ValChg=0;
+}
+}
+//************************************

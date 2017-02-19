@@ -7,15 +7,19 @@
 ******************************************************************/
 
 #include <EEPROM.h>
-
+#include "VirtuinoBluetooth.h" 
 
 float P5VF4,P0_5VF4=2.50,P1_5VF4=2.51,P2_5VF4=2.52,P3_5VF4=2.53;
+float P5VF4memo=999;
 float P6VF4,P0_6VF4=2.60,P1_6VF4=2.60,P2_6VF4=2.60,P3_6VF4=2.60;
+float P6VF4memo=999;
 int intP5VF4,intP0_5VF4,intP1_5VF4,intP2_5VF4,intP3_5VF4; 
 int intP6VF4,intP0_6VF4,intP1_6VF4,intP2_6VF4,intP3_6VF4;
 
 float P5VF5,P0_5VF5=10000,P1_5VF5=10000,P2_5VF5=10000,P3_5VF5=10000;
+float P5VF5memo=999;
 float P6VF5,P0_6VF5=5000,P1_6VF5=5000,P2_6VF5=5000,P3_6VF5=5000;
+float P6VF5memo=999;
 int intP5VF5,intP0_5VF5,intP1_5VF5,intP2_5VF5,intP3_5VF5; 
 int intP6VF5,intP0_6VF5,intP1_6VF5,intP2_6VF5,intP3_6VF5;
  
@@ -35,6 +39,10 @@ char charVal[10];
 int ValChg=0;
 char CR=13;
 int Lu=1;
+
+ VirtuinoBluetooth virtuino(Serial1,9600);                                                             
+float Testread=0.00;
+
 //-------------
 void setup()
 {
@@ -48,8 +56,8 @@ void setup()
 //  sauverInt(10, 261); 
 //   sauverInt(12, 262); 
 //    sauverInt(14, 263); 
-
-
+//
+//
 //sauverInt(16, 10000); 
 //  sauverInt(18, 10000); 
 //   sauverInt(20, 10000); 
@@ -57,7 +65,7 @@ void setup()
 //    
 // sauverInt(24, 5000); 
 //  sauverInt(26, 5000); 
-   sauverInt(28, 5000); 
+//   sauverInt(28, 5000); 
 //    sauverInt(30, 5000); 
 //
 
@@ -79,6 +87,12 @@ LecturePrg();
 //-------------
 void loop()
 {    
+   virtuino.run();  
+   virtuino.vMemoryWrite(0, prog);
+   
+
+   
+
     // sequence
     switch (seq) 
     {
@@ -89,7 +103,7 @@ void loop()
         
       case 2: 
             LecturePrg();
-            seq=3;
+            seq=4;
         break;
    
       case 3: 
@@ -330,20 +344,77 @@ ValChg=1;
 }
 //*********************************************************
 void Reception() {
-while (Serial1.available() > 0) { 
+
+ P5VF4memo=virtuino.vMemoryRead(1)/100.0;
+ if (P5VF4memo!=0){
+  if (P5VF4!=P5VF4memo){
+    P5VF4=P5VF4memo;
+    EcritureEprom5VF4();
+
+  }
+} else {
+  virtuino.vMemoryWrite(1, P5VF4*100);
+          P5VF4memo=P5VF4;
+}
+
+ P5VF5memo=virtuino.vMemoryRead(2)*100.0;
+ if (P5VF5memo!=0){
+  if (P5VF5!=P5VF5memo){
+    P5VF5=P5VF5memo;
+    EcritureEprom5VF5();
+
+  }
+} else {
+  virtuino.vMemoryWrite(2, P5VF5/100);
+          P5VF5memo=P5VF5;
+}
+
+
+ P6VF4memo=virtuino.vMemoryRead(3)/100.0;
+ if (P6VF4memo!=0){
+  if (P6VF4!=P6VF4memo){
+    P6VF4=P6VF4memo;
+    EcritureEprom6VF4();
+
+  }
+} else {
+  virtuino.vMemoryWrite(3, P6VF4*100);
+          P6VF4memo=P6VF4;
+}
+
+
+  P6VF5memo=virtuino.vMemoryRead(4)*100.0;
+ if (P6VF5memo!=0){
+  if (P6VF5!=P6VF5memo){
+    P6VF5=P6VF5memo;
+    EcritureEprom6VF5();
+
+  }
+} else {
+  virtuino.vMemoryWrite(4, P6VF5/100);
+          P6VF5memo=P6VF5;
+}
+  
+//Serial.println(P5VF4);
+//Serial.println(P5VF5);
+//Serial.println(P6VF4);
+//Serial.println(P6VF5);
+
+/* while (Serial1.available() > 0) { 
 
     octetReception = Serial1.read(); 
     
     if (octetReception == 13) { 
           
           
-        if (chaineReception.substring(0, 4) == "5VF4")  
-        {
-          String InString;
-          InString = chaineReception.substring(4);
-          P5VF4=InString.toFloat();
-          EcritureEprom5VF4();         
-        }
+        //if (chaineReception.substring(0, 4) == "5VF4")  
+        //{
+        //  String InString;
+        //  InString = chaineReception.substring(4);
+        //  P5VF4=InString.toFloat();
+        //  EcritureEprom5VF4();         
+        //}
+
         
         if (chaineReception.substring(0, 4) == "6VF4")  
         {
@@ -383,13 +454,13 @@ while (Serial1.available() > 0) {
       delay(1); // laisse le temps au caractères d'arriver
     }
 
-    }
+    }*/
 }
 
 //***********************************
 void AffichageParam(){
 
-if (Lu==0){
+/*if (Lu==0){
 Lu=1;
 Serial.println(Lu);
     dtostrf( P5VF4, 1, 3, charVal);
@@ -413,7 +484,7 @@ Serial.println(TramProc);
  
 //    Serial1.print("*");
 //Serial.println("*");
-      }
+      }*/
 }
 
 //***********************************
@@ -424,21 +495,23 @@ void EcritureVersGE(){
    Serial2.print("5VF4=");
     Serial2.print(P5VF4);
         Serial2.write('\r');       
-       
+          Serial.println(P5VF4);
     
    Serial3.print("6VF4=");
      Serial3.print(P6VF4);
         Serial3.write('\r');
-        
+          Serial.println(P6VF4);        
    
    Serial2.print("5VF5=");
      Serial2.print(P5VF5);
         Serial2.write('\r');
-        
+          Serial.println(P5VF5);
+          
    Serial3.print("6VF5=");
      Serial3.print(P6VF5);
        Serial3.write('\r');
-        
+          Serial.println(P6VF5);
+          
 ValChg=0;
 //}
 }

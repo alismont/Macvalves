@@ -57,6 +57,7 @@ void setup() {
     .setSize(80, 20)
     .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
     ; 
+     
   //**************************************
   Tl= cp5.addTextlabel("label2")
     .setText("Profondeur droit   6VF4: ")
@@ -85,7 +86,7 @@ void setup() {
     ; 
   //**************************************
   Tl= cp5.addTextlabel("label3")
-    .setText("Profondeur gauche 5VF5: ")
+    .setText("Vitesse rotat gauche 5VF5: ")
     .setPosition(20, 145)
     .setColorValue(100)
     .setFont(createFont("Georgia", 20))
@@ -112,7 +113,7 @@ void setup() {
     
       //**************************************
   Tl= cp5.addTextlabel("label4")
-    .setText("Profondeur droit   6VF5: ")
+    .setText("Vitesse rotat droit 6VF5: ")
     .setPosition(20, 215)
     .setColorValue(100)
     .setFont(createFont("Georgia", 20))

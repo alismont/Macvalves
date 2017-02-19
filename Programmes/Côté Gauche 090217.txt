@@ -70,7 +70,7 @@
    SVV (*SAVE VARIABLES   *)
   (* IF (VF5=0) VF5=10000 *)
   (* IF (VF4=0.0) VF4=2.3 *)
-   VF3=VF4-0.02
+   VF3=VF4-0.08
 (* DESCENDRE
    DON5.14 = OFF
    DON5.13 = ON
@@ -87,10 +87,9 @@
    ST
    TLC=95	
    TLE=1
-(*501EXM1 *)
-501MT=VEL
+   MT=VEL
    MPI=5
-   RPI
+501RPI
    STM4=1   
    IF (AI1 <= VF4 ) GOTO 501
    ST
@@ -106,7 +105,7 @@
    DON5.13 = OFF
    DON5.14 = ON
    DON5.12 = ON
-   STM1 = 0.5
+   STM1 = 1
    WAIT TM1
    DON5.12 = OFF
    DON5.11 = ON
